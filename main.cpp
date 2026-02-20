@@ -33,7 +33,7 @@ int main()
     }
     else
     {
-        cout << "\"" << searchWord << "\" NOT found in \"" << text << "\" \n";
+        cout << "\"" << searchWord << "\" NOT found in \"" << text << "\" \n\n";
     }
 
 

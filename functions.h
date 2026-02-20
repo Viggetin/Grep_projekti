@@ -2,8 +2,8 @@
 // Created by victo on 20.2.2026.
 //
 
-#ifndef TEHTAVAT_FUNCTIONS_H
-#define TEHTAVAT_FUNCTIONS_H
+#ifndef GREP_FUNCTIONS_H
+#define GREP_FUNCTIONS_H
 using namespace std;
 
 void printLogo()
@@ -17,6 +17,7 @@ void printLogo()
     cout << "                 | |                    _/ |                \n";
     cout << "                 |_|                   |__/                 \n";
     cout << "\n" << " Grep-projekti 2026 kevat"<< " \n";
+    cout << " (C) Victor Sten "<< " \n\n";
 }
 
-#endif //TEHTAVAT_FUNCTIONS_H
+#endif //GREP_FUNCTIONS_H
