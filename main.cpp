@@ -15,11 +15,11 @@ int main()
     string text, searchWord;
 
     // Kysytaan lause/teksti
-    cout << "Give a string from which to search for:  ";
+    cout << "Give a string from which to search for: ";
     getline(cin,text);
 
     // Kysytaan tarkentava haku mita tekstista halutaan etsia
-    cout << "Give search string:  ";
+    cout << "Give search string: ";
     getline(cin, searchWord);
 
     // Haetaan merkkijonon sijainti tekstista
