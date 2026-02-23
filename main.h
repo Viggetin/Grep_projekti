@@ -11,6 +11,9 @@
 #include <iostream>
 // Merkkirivien kasittelyyn
 #include <string>
+// Tiedostoja varten
+#include <fstream>
+
 using namespace std;
 
 
