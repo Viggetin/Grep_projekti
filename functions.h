@@ -20,7 +20,7 @@ void printLogo()
     cout << " (C) Victor Sten "<< " \n\n";
 }
 
-/* Ensimmäinnen Inkrementtin- Toiminnallisuus */
+/* Ensimmäinnen Inkrementin- Toiminnallisuus */
 
 void InkrementtiYks()
 {
@@ -50,7 +50,7 @@ void InkrementtiYks()
     }
 }
 
-/* Toisen Inkrementtin- Toiminnallisuus */
+/* Toisen Inkrementin- Toiminnallisuus */
 
 void InkrementtiKaks(char *argv[])
 {
@@ -63,8 +63,8 @@ void InkrementtiKaks(char *argv[])
     if (!fileText.is_open())
     {
         cout << "Can't open the file" << "\n";
-
     }
+
     // Debuggausta varten
     //cout << "Tiedosto: " << argv[2] << "\n";
     //cout << "Hakusana: " << argv[1] << "\n";
@@ -80,7 +80,7 @@ void InkrementtiKaks(char *argv[])
         // Ehto toteutuu jos haetulla sanalla on sijainti teksissa
         if (line.find(searchWord) != string::npos)
         {
-            cout << line << endl;
+            cout << line << "\n";
             count++;
         }
     }
@@ -94,5 +94,68 @@ void InkrementtiKaks(char *argv[])
     fileText.close();
 }
 
+
+/* Kolmannen Inkrementin- Toiminnallisuus */
+
+void inkrementtiKolme(char *argv[])
+{
+    ifstream fileText(argv[3]);
+    if (!fileText.is_open())
+    {
+        cout << "Can't open the file" << "\n";
+    }
+
+    string searchWord;
+    string line;
+    string options;
+
+    // Argumenttien boolean muuttujat --> tarkistetaan onko kaytossa
+    bool showLineNumbers = false;
+    bool showOccurrences = false;
+
+
+    // Argumenttien ja hakusanan hakeminen komennosta
+    options = argv[1];
+    searchWord = argv[2];
+
+
+    // Rivinumerointi
+    if (options.find('l') != string::npos)
+    {
+        showLineNumbers = true;
+    }
+    // Hakusana laskuri
+    if (options.find('o', 2) != string::npos)
+    {
+        showOccurrences = true;
+    }
+
+    int lineCounter = 1;
+    int wordCount = 0;
+
+    while (getline(fileText, line))
+    {
+
+        if (line.find(searchWord) != string::npos)
+        {
+            if (showLineNumbers)
+            {
+                cout<< lineCounter << ": " <<  line << "\n";
+            }
+            else
+            {
+                cout << line << "\n";
+            }
+            wordCount++;
+        }
+        lineCounter++;
+    }
+    if (showOccurrences)
+    {
+        cout <<"\n" <<"Occurrences of lines containing " << "\"" << searchWord << "\": " << wordCount << "\n";
+    }
+
+    fileText.close();
+}
 
 #endif //GREP_FUNCTIONS_H

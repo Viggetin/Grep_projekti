@@ -23,6 +23,10 @@ int main(int argc, char *argv[])
     {
         InkrementtiKaks(argv);
     }
+    else if (argc == 4)
+    {
+        inkrementtiKolme(argv);
+    }
 
     return 0;
 }
