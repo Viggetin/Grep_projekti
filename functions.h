@@ -6,6 +6,14 @@
 #define GREP_FUNCTIONS_H
 using namespace std;
 
+/*  Ohjelman logo & tekijatiedot
+ *  ---------------------------------------------------
+*   Funktio yksinkertaisesti kutsuttaessa tekee Cout:in avulla ASCII logon
+*   Myös lisaa tekijan nimen
+*
+*   Tama on palautuksessa ei kaytossa
+*/
+
 void printLogo()
 {
     cout << "   _____                  _____           _      _    _   _ \n";
@@ -20,7 +28,13 @@ void printLogo()
     cout << " (C) Victor Sten "<< " \n\n";
 }
 
-/* Ensimmäinnen Inkrementin- Toiminnallisuus */
+/* Ensimmäinnen Inkrementin- Toiminnallisuus
+ *---------------------------------------------------
+ * Funktio suorittaa vaaditut ensimmainsen inkrementint toiminnot
+ *
+ * Funktio siis toimii, kun ohjelmaa ajetaan suoraan joko .exe tiedostosta tai komentorivilta ./Grep
+ * Ohjelma kysyy kayttajalta tekstin, josta kayttaja voi etsia tietyn merkkijonon.
+ */
 
 void InkrementtiYks()
 {
@@ -50,20 +64,39 @@ void InkrementtiYks()
     }
 }
 
-/* Toisen Inkrementin- Toiminnallisuus */
+/* Toisen Inkrementin- Toiminnallisuus
+ *---------------------------------------------------
+ * Funktio suorittaa toisen inkrementin vaaditut toiminnot.
+ *
+ * Funktio aloitetaan tiedoston avaamisella, josta tarkistetaan heti avautuuko tiedosto oikein.
+ * Tassa tapauksessa poikkeuskasittely toimii, jos mainittua tiedostoa ei ole olemassa.
+ * Jos tiedosto avataan onnistuneesti sen koko mitataan ja tallennetaan size muuttujaan.
+ *
+ * Ohjelma jatkaa tasta tallentamalla hakusanan komentorivin argumentista ja tarkistaa koko tekstin rivi rivilta
+ * , kun vastaava hakusana tulee niin se tulostaa koko merkkijonon rivivaihtoon saakka. Lopuksi tiedosto suljetaan
+ */
 
 void InkrementtiKaks(char *argv[])
 {
-    // Tiedoston avaus ja tarkistus onnistuiko se
-    ifstream fileText(argv[2]);
+    ifstream fileText(argv[2], ios::binary);
+    if (!fileText.is_open())
+    {
+        cout << "An exception occurred. Exception Nr. -1" << "\n";
+        cout << "Could not find out the size of file \"" << argv[2] << "\"" << "\n";
+        return;
+    }
+    else
+    {
+        fileText.seekg(0, ios::end);        // siirry tiedoston loppuun
+        streampos size = fileText.tellg();  // tiedoston koko tavuina
+        fileText.seekg(0, ios::beg);        // takaisin alkuun
+    }
+
 
     string searchWord;
     string line;
 
-    if (!fileText.is_open())
-    {
-        cout << "Can't open the file" << "\n";
-    }
+
 
     // Debuggausta varten
     //cout << "Tiedosto: " << argv[2] << "\n";
@@ -95,23 +128,49 @@ void InkrementtiKaks(char *argv[])
 }
 
 
-/* Kolmannen Inkrementin- Toiminnallisuus */
+/* Kolmannen ja neljannen Inkrementin- Toiminnallisuus
+ * ---------------------------------------------------
+ * Funktio suorittaa kolmannen ja neljannen inkrementin toiminnallisuudet.
+ *
+ * Funktio aloittaa samanlaisella tiedoston tarkistuksella mita toisessa inkrementissa.
+ * Toiminnallisuus tuli molempiin neljannen inkrementin aikana.
+ *
+ * Funktio siis perustuu samaan logiikkaan mita toinen inkrementti mutta tassa kayttajalla on
+ * ominaisuutena hakea tiedostosta enemman informaatiota. Vaihtoehdot tulevat lisatyista argumenteista
+ * , jotka alkavat "-o" komennon jalkeen vaihtoehtoina on siis
+ *
+ * -l naytetaan tiedoston rivinumerot 1:sta eteenpain tiedoston loppuun saakka
+ * -o annetaan ilmenneiden hakusanojen lukumaara lopussa
+ * -r haetaan tiedostosta merkkijonot, joissa ei ilmene hakusanaa
+ * -i Ei huomioida isoja kirjaimia
+ */
 
 void inkrementtiKolme(char *argv[])
 {
-    ifstream fileText(argv[3]);
+    // Tiedoston tarkistus -> inkrementti 4
+    //Avataan tekstitiedosto ja tarkistetaan onko se auki -> Jos ei niin virheilmoitus ja return
+    ifstream fileText(argv[3], ios::binary);
     if (!fileText.is_open())
     {
-        cout << "Can't open the file" << "\n";
+        cout << "An exception occurred. Exception Nr. -1" << "\n";
+        cout << "Could not find out the size of file \"" << argv[3] << "\"" << "\n";
+        return;
     }
+    fileText.seekg(0, ios::end);
+    streampos size = fileText.tellg();
+    fileText.seekg(0, ios::beg);
 
-    string searchWord;
-    string line;
-    string options;
+
+    string searchWord;      // Kayttajan hakusana
+    string inputSearchWord; // Kayttajan alkup. hakusana, jos ei huomioida isoja kirjaimia
+    string line;            // Rivimuuttuja
+    string options;         // Argumentti optioiden tallennus
 
     // Argumenttien boolean muuttujat --> tarkistetaan onko kaytossa
     bool showLineNumbers = false;
     bool showOccurrences = false;
+    bool reverseSearch = false;
+
 
 
     // Argumenttien ja hakusanan hakeminen komennosta
@@ -124,19 +183,40 @@ void inkrementtiKolme(char *argv[])
     {
         showLineNumbers = true;
     }
-    // Hakusana laskuri
+    // Hakusana laskuri + tarkistaa o kirjaimen "-o" jalkeen
     if (options.find('o', 2) != string::npos)
     {
         showOccurrences = true;
     }
+    // Kaanteinen haku -> haetaan rivit, jossa ei esiinny hakusana
+    if (options.find('r') != string::npos)
+    {
+        reverseSearch = true;
+    }
+    // Ei huomioida isoja kirjaimia
+    if (options.find('i') != string::npos)
+    {
+        inputSearchWord = searchWord;
+        string nonCaseSearchWord = searchWord; // tätä käytetään haussa
 
+        // Kaydaan koko hakusana lapi ja muutetaan kirjaimet pieneksi
+        for (int i = 0; i < nonCaseSearchWord.length(); i++)
+        {
+            nonCaseSearchWord[i] = tolower(nonCaseSearchWord[i]);
+        }
+
+        searchWord = nonCaseSearchWord;
+    }
+
+    // Rivi- ja sanalaskurien alustus
     int lineCounter = 1;
     int wordCount = 0;
 
+    // Tiedoston sisallon lapikaynti
     while (getline(fileText, line))
     {
-
-        if (line.find(searchWord) != string::npos)
+        // Hakusanan etsiminen, jos ei tehda kaanteista hakua
+        if ((line.find(searchWord) != string::npos) && reverseSearch == false)
         {
             if (showLineNumbers)
             {
@@ -148,14 +228,27 @@ void inkrementtiKolme(char *argv[])
             }
             wordCount++;
         }
+        // tulostetaan vain rivit joissa hakusanaa EI esiinny jos kaanteinen haku on asetettu paalle
+        else if ((line.find(searchWord) == string::npos) && reverseSearch == true)
+        {
+            cout<< lineCounter << ": " <<  line << "\n";
+            wordCount++;
+        }
         lineCounter++;
     }
-    if (showOccurrences)
+    // Esitetaan lopulliset tulokset joko normihausta tai kaanteisesta hausta
+    if (showOccurrences && reverseSearch == false)
     {
         cout <<"\n" <<"Occurrences of lines containing " << "\"" << searchWord << "\": " << wordCount << "\n";
+    }
+    else if (showOccurrences && reverseSearch == true)
+    {
+
+        cout <<"\n" <<"Occurrences of lines NOT containing " << "\"" << inputSearchWord << "\": " << wordCount << "\n";
     }
 
     fileText.close();
 }
+
 
 #endif //GREP_FUNCTIONS_H

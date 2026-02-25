@@ -13,6 +13,8 @@
 #include <string>
 // Tiedostoja varten
 #include <fstream>
+// Tiedoston kokojen tarkistamista varten
+#include <filesystem>
 
 using namespace std;
 
