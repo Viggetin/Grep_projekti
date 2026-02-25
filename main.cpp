@@ -4,7 +4,7 @@
 
 // Sisallytetaan muut headeri tiedostot
 #include "main.h"
-#include "functions.h"
+#include "functions.cpp"
 
 using namespace std;
 

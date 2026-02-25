@@ -2,8 +2,7 @@
 // Created by victo on 20.2.2026.
 //
 
-#ifndef GREP_FUNCTIONS_H
-#define GREP_FUNCTIONS_H
+#include "main.h"
 using namespace std;
 
 /*  Ohjelman logo & tekijatiedot
@@ -250,5 +249,3 @@ void inkrementtiKolme(char *argv[])
     fileText.close();
 }
 
-
-#endif //GREP_FUNCTIONS_H

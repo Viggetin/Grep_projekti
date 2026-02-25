@@ -16,7 +16,5 @@
 // Tiedoston kokojen tarkistamista varten
 #include <filesystem>
 
-using namespace std;
-
 
 #endif //GREP_GREP_MAIN_H
