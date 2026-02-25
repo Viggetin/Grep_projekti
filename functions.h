@@ -11,7 +11,7 @@ using namespace std;
 *   Funktio yksinkertaisesti kutsuttaessa tekee Cout:in avulla ASCII logon
 *   Myös lisaa tekijan nimen
 *
-*   Tama on palautuksessa ei kaytossa
+*   Tama on palautuksessa kommentoitu
 */
 
 void printLogo()
