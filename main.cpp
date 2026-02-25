@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
-    printLogo();
+    //printLogo();
 
     // Alustetaan if lauseella eri argc arvot
     // Argc = 1 -> Merkkijonon etsiminen kayttajan tekstista
